@@ -84,17 +84,15 @@ def backup(singleSection):
     while(True):
         section = "backup" + str(i)
         if False == config.has_section(section):
-          break
-        
-        if singleSection != None && singleSection != section : 
-          continue
-    
-        print "Begin processing '" + section + "'" 
-        retcode = processBackupSection(config, section, datetimestr)
-        print "Done processing '" + section + "' with return code '" + str(retcode) + "'"
-        
-        if 0 != retcode:
             break
+        
+        if singleSection == None or singleSection != section : 
+            print "Begin processing '" + section + "'" 
+            retcode = processBackupSection(config, section, datetimestr)
+            print "Done processing '" + section + "' with return code '" + str(retcode) + "'"
+            
+            if 0 != retcode:
+                break
         
         i = i + 1
         
@@ -121,7 +119,7 @@ def main():
         else:
             assert False, "unhandled option"
     
-    backup
+    backup(section)
 
 if __name__ == "__main__":
     main()
