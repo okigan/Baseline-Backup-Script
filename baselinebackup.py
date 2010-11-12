@@ -34,7 +34,7 @@ def findLatestFile(wildcardPath):
 def processBackupSection(config, section, datetimestr):
     backupDir = config.get(section, "backupDir")
     p7FullOptions = config.get(section, "p7FullOptions")
-    p7IncrOptions = config.get(section, "p7IncrOptions")
+    p7DiffOptions = config.get(section, "p7DiffOptions")
     includeFileList = config.get(section, "includeFileList")
     excludeFileList = config.get(section, "excludeFileList")
 
@@ -55,7 +55,7 @@ def processBackupSection(config, section, datetimestr):
         fullBackupPath = latest
         diffBackupPath = os.path.join(backupDir, diffBackupPrefix + datetimestr + ".7z")
         params = " u " + \
-            p7IncrOptions + " " + \
+            p7DiffOptions + " " + \
             fullBackupPath +" " + \
             "-u- -up0q3x2z0!" + diffBackupPath +  " " +  \
             "@" + includeFileList + " " \
