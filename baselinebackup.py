@@ -6,8 +6,11 @@ import glob
 import operator
 import ConfigParser
 import subprocess
+import getopt
+
 from datetime import datetime
 from time import strftime, gmtime
+
 
 
 fullBackupPrefix = "FULL"
@@ -69,7 +72,7 @@ def processBackupSection(config, section, datetimestr):
     return retcode
 
 
-def backup():
+def backup(singleSection):
     config = ConfigParser.ConfigParser()
     config.read("backup.ini")
     
@@ -81,7 +84,10 @@ def backup():
     while(True):
         section = "backup" + str(i)
         if False == config.has_section(section):
-            break
+          break
+        
+        if singleSection != None && singleSection != section : 
+          continue
     
         print "Begin processing '" + section + "'" 
         retcode = processBackupSection(config, section, datetimestr)
@@ -92,4 +98,30 @@ def backup():
         
         i = i + 1
         
-backup()
+def main():
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], "ho:v", ["help", "section="])
+    except getopt.GetoptError, err:
+        # print help information and exit:
+        print str(err) # will print something like "option -a not recognized"
+        #usage()
+        sys.exit(2)
+        
+    section = None
+    verbose = False
+    
+    for o, a in opts:
+        if o == "-v":
+            verbose = True
+        elif o in ("-h", "--help"):
+            #usage()
+            sys.exit()
+        elif o in ("-s", "--section"):
+            section = a
+        else:
+            assert False, "unhandled option"
+    
+    backup
+
+if __name__ == "__main__":
+    main()
