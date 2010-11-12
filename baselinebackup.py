@@ -86,7 +86,7 @@ def backup(singleSection):
         if False == config.has_section(section):
             break
         
-        if singleSection == None or singleSection != section : 
+        if singleSection == None or singleSection == section : 
             print "Begin processing '" + section + "'" 
             retcode = processBackupSection(config, section, datetimestr)
             print "Done processing '" + section + "' with return code '" + str(retcode) + "'"
