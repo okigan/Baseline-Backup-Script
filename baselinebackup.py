@@ -72,9 +72,13 @@ def processBackupSection(config, section, datetimestr):
     return retcode
 
 
-def backup(singleSection):
+def backup(configfile, singleSection):
     config = ConfigParser.ConfigParser()
-    config.read("backup.ini")
+    
+    if(None == configfile)
+        configfile = "backup.ini"
+         
+    config.read(configfile)
     
     #TODO: resolve how to deal with python mess regarding time with timezone info
     #datetimestr = datetime.utcnow().isoformat()
@@ -112,6 +116,7 @@ def main():
         usage()
         sys.exit(2)
         
+    configfile = None
     section = None
     verbose = False
     
@@ -124,12 +129,14 @@ def main():
         elif o in ("--version"):
             usage()
             sys.exit()
+        elif o in ("-c", "--config"):
+            configfile = a
         elif o in ("-s", "--section"):
             section = a
         else:
             assert False, "unhandled option"
     
-    backup(section)
+    backup(configfile, section)
 
 if __name__ == "__main__":
     main()
