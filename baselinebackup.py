@@ -95,24 +95,34 @@ def backup(singleSection):
                 break
         
         i = i + 1
-        
+
+def usage():
+    print "Baseline backup script"
+    print "Options:"
+    print "    c|config -- specify alternative config file"
+    print "    s|section -- limit processing to specific section of the config file"
+
 def main():
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "ho:v", ["help", "section="])
+        opts, args = getopt.getopt(sys.argv[1:], "hvc:s:", 
+            ["help", "version", "config=", "section="])
     except getopt.GetoptError, err:
         # print help information and exit:
         print str(err) # will print something like "option -a not recognized"
-        #usage()
+        usage()
         sys.exit(2)
         
     section = None
     verbose = False
     
     for o, a in opts:
-        if o == "-v":
+        if o in ("-v"):
             verbose = True
         elif o in ("-h", "--help"):
-            #usage()
+            usage()
+            sys.exit()
+        elif o in ("--version"):
+            usage()
             sys.exit()
         elif o in ("-s", "--section"):
             section = a
