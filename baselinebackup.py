@@ -75,7 +75,7 @@ def processBackupSection(config, section, datetimestr):
 def backup(configfile, singleSection):
     config = ConfigParser.ConfigParser()
     
-    if(None == configfile)
+    if None == configfile:
         configfile = "backup.ini"
          
     config.read(configfile)
