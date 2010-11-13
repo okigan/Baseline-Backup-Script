@@ -72,9 +72,13 @@ def processBackupSection(config, section, datetimestr):
     return retcode
 
 
-def backup(singleSection):
+def backup(configfile, singleSection):
     config = ConfigParser.ConfigParser()
-    config.read("backup.ini")
+    
+    if(None == configfile)
+        configfile = "backup.ini"
+         
+    config.read(configfile)
     
     #TODO: resolve how to deal with python mess regarding time with timezone info
     #datetimestr = datetime.utcnow().isoformat()
@@ -95,31 +99,44 @@ def backup(singleSection):
                 break
         
         i = i + 1
-        
+
+def usage():
+    print "Baseline backup script"
+    print "Options:"
+    print "    c|config -- specify alternative config file"
+    print "    s|section -- limit processing to specific section of the config file"
+
 def main():
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "ho:v", ["help", "section="])
+        opts, args = getopt.getopt(sys.argv[1:], "hvc:s:", 
+            ["help", "version", "config=", "section="])
     except getopt.GetoptError, err:
         # print help information and exit:
         print str(err) # will print something like "option -a not recognized"
-        #usage()
+        usage()
         sys.exit(2)
         
+    configfile = None
     section = None
     verbose = False
     
     for o, a in opts:
-        if o == "-v":
+        if o in ("-v"):
             verbose = True
         elif o in ("-h", "--help"):
-            #usage()
+            usage()
             sys.exit()
+        elif o in ("--version"):
+            usage()
+            sys.exit()
+        elif o in ("-c", "--config"):
+            configfile = a
         elif o in ("-s", "--section"):
             section = a
         else:
             assert False, "unhandled option"
     
-    backup(section)
+    backup(configfile, section)
 
 if __name__ == "__main__":
     main()
